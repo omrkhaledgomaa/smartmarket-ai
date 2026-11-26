@@ -1,0 +1,16 @@
+{
+  "name": "smartmarket-ai-backend",
+  "version": "0.8.1",
+  "private": true,
+  "description": "SmartMarket AI backend with supplier and purchase inventory management",
+  "scripts": {
+    "start": "node server.js",
+    "backup": "node scripts/backup.js",
+    "test": "node scripts/test.js",
+    "hash-password": "node scripts/hash-password.js",
+    "restore": "node scripts/restore.js"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  }
+}
