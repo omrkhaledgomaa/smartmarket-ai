@@ -1,0 +1,24 @@
+services:
+  smartmarket:
+    build: .
+    container_name: smartmarket-ai
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATA_DIR: /app/data
+      COOKIE_SECURE: "true"
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:?Set ADMIN_PASSWORD_HASH in .env}
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - smartmarket_data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  smartmarket_data:
