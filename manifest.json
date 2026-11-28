@@ -1,1 +1,14 @@
 
+{
+  "name": "SmartMarket AI",
+  "short_name": "SmartMarket",
+  "description": "SmartMarket AI - متجر ذكي",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#10243a",
+  "lang": "ar",
+  "dir": "rtl"
+}
