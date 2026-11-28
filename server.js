@@ -118,6 +118,13 @@ const server=http.createServer(async(req,res)=>{
  res.setHeader('Permissions-Policy','camera=(), microphone=(), geolocation=()');
  res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
  const url=new URL(req.url,'http://localhost'),p=url.pathname,ip=req.socket.remoteAddress||'unknown';
+ if(req.method==='GET'&&(p==='/manifest.json'||p==='/sw.js'||p==='/icons/icon-192.png'||p==='/icons/icon-512.png')){
+  const assetPath=path.join(__dirname,p==='manifest.json'?'manifest.json':p==='sw.js'?'sw.js':p);
+  const types={'manifest.json':'application/manifest+json','sw.js':'application/javascript; charset=utf-8','icon-192.png':'image/png','icon-512.png':'image/png'};
+  const key=p.split('/').pop();
+  if(fs.existsSync(assetPath)){res.writeHead(200,{'Content-Type':types[key]||'application/octet-stream','Cache-Control':key==='sw.js'?'no-cache':'public, max-age=86400'});res.end(fs.readFileSync(assetPath));return;}
+  json(res,404,{error:'asset_not_found'});return;
+ }
  if(req.method==='GET'&&p==='/'){res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});res.end(fs.readFileSync(PUBLIC_FILE));return;}
  if(req.method==='GET'&&p==='/health'){json(res,200,{ok:true,service:'SmartMarket backend',database:'sqlite'});return;}
  if(req.method==='GET'&&p==='/api/products'){json(res,200,{products:products()});return;}

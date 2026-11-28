@@ -97,6 +97,12 @@ main{padding-top:0!important}
 .btn{background:#1765d8!important}.btn:hover{background:#104fae!important}.footer{background:#12386f!important;color:#d8e8ff!important}.total{color:#1765d8!important}
 @media(max-width:750px){.top{padding:8px 12px!important}.hero{margin:8px 0 13px!important;padding:18px 17px!important;min-height:0!important;gap:12px!important}.hero h1{font-size:27px!important}.heroart{min-height:140px!important}.heroart img{height:145px!important;width:94%!important}.heroart:before{font-size:12px!important;padding:6px 9px!important}.grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}.pic{height:135px!important}}
 </style>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#2259d6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SmartMarket AI">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
 </head>
 <body>
 <header><div class="top"><div class="logo">SmartMarket <span>AI</span></div><div class="search">🔎 <input id="search" placeholder="ابحث عن منتج..." oninput="renderProducts()" aria-label="بحث عن المنتجات"><button type="button" onclick="clearProductSearch()" aria-label="مسح البحث" style="border:0;background:transparent;cursor:pointer;color:var(--muted);padding:2px 6px">مسح</button></div><button class="cartbtn" onclick="openCart()">🛒 السلة <span id="cartcount">0</span></button></div></header>
@@ -206,4 +212,6 @@ submitOrder=async function(){if(!serverMode){localSubmitOrder();return;}
 const localLookupOrder=lookupOrder;
 lookupOrder=async function(){if(!serverMode){localLookupOrder();return;}const no=document.getElementById('trackorder').value.trim().toUpperCase(),phone=document.getElementById('trackphone').value.replace(/[\s()-]/g,''),result=document.getElementById('trackingresult');result.style.display='block';if(!no||!phone){result.textContent='من فضلك أدخل رقم الطلب ورقم الهاتف.';return;}try{const r=await fetch('/api/orders/'+encodeURIComponent(no)+'?phone='+encodeURIComponent(phone));const d=await r.json();if(!r.ok||!d.order){result.textContent='لم يتم العثور على طلب مطابق. تأكد من رقم الطلب ورقم الهاتف.';return;}const o=d.order,steps=['جديد','قيد التجهيز','تم الشحن','تم التسليم'],idx=steps.indexOf(o.status),timeline=o.status==='ملغي'?'<div style="padding:10px;color:#b42318;background:#fff1f0;border-radius:10px">⛔ الطلب ملغي</div>':`<div style="display:flex;gap:5px;flex-wrap:wrap;margin:12px 0">${steps.map((st,i)=>`<div style="flex:1;min-width:65px;text-align:center;padding:8px;border-radius:9px;background:${i<=idx?'#e7f0ff':'#f1f3f6'};color:${i<=idx?'#2259d6':'#6c7890'}">${i<=idx?'✓ ':''}${st}</div>`).join('')}</div>`;result.innerHTML=`<b>طلب ${esc(o.orderNo)}</b><br>الحالة الحالية: <b>${esc(o.status)}</b>${timeline}<br>تاريخ الطلب: ${esc(o.date||'')}<br>المنتجات: ${(o.items||[]).map(it=>esc(it.product)+' × '+it.qty).join('، ')}<br>الشحن: ${Number(o.shipping||0).toLocaleString('ar-EG')} جنيه<br>الإجمالي: ${Number(o.total||0).toLocaleString('ar-EG')} جنيه`;}catch{result.textContent='تعذر الاتصال بالسيرفر.'}}
 initServerMode();
-</script>\n</body></html>
+</script>\n
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}</script>
+</body></html>
