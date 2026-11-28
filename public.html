@@ -98,8 +98,7 @@ async function initServerMode(){try{
  const [pr,settings]=await Promise.all([fetch('/api/products',{cache:'no-store'}),fetch('/api/public/settings',{cache:'no-store'})]);if(!pr.ok||!settings.ok)return;
  const productData=await pr.json(),settingsData=await settings.json();if(!Array.isArray(productData.products))return;
  serverMode=true;items.splice(0,items.length,...productData.products);cats.splice(0,cats.length,'الكل',...new Set(items.map(p=>p.cat||'أخرى')));shippingFee=Math.max(0,Number(settingsData.settings?.shippingFee)||0);
- const owner=document.getElementById('owner');if(owner)owner.style.display='none';const couponRow=document.getElementById('coupon')?.parentElement;if(couponRow)couponRow.style.display='none';
- const top=document.querySelector('.top');if(top&&!document.getElementById('adminlink')){const a=document.createElement('a');a.id='adminlink';a.href='/admin';a.textContent='⚙️ إدارة المتجر';a.style.cssText='padding:10px 12px;border-radius:10px;background:#edf3ff;color:#2259d6;text-decoration:none;font-weight:bold';top.insertBefore(a,top.lastElementChild)}
+ const owner=document.getElementById('owner');if(owner)owner.style.display='none';const couponRow=document.getElementById('coupon')?.parentElement;if(couponRow)couponRow.style.disp
  const hint=document.querySelector('#tracking small');if(hint)hint.textContent='أدخل رقم الطلب ورقم الهاتف للتحقق من الطلب المسجل على السيرفر.';
  renderCats();renderProducts();drawCart();updateCartCount();
  }catch(e){/* Local prototype remains available when API is not running. */}}
